@@ -2,6 +2,7 @@ package com.example.LibraryAPI.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,12 @@ public class Autor {
     @Column(name = "Nome", length = 150, nullable = false)
     private String nome;
 
-    @OneToMany
+    @Column(name = "data_nascimento", nullable = false)
+    private LocalDate dataNascimento;
+
+    @Column(name = "nacionalidade", length = 50, nullable = false)
+    private String nacionalidade;
+
+    @OneToMany(mappedBy = "")
     private List<Livro> livros;
 }
