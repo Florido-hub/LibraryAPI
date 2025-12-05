@@ -19,7 +19,7 @@ public class AutorRepositoryTest {
     @Test
     public void salvarTest(){
         Autor autor = new Autor();
-        autor.setNome("Maria");
+        autor.setNome("josé");
         autor.setNacionalidade("brasileira");
         autor.setDataNascimento(LocalDate.of(1950,1,31));
 
@@ -29,9 +29,9 @@ public class AutorRepositoryTest {
 
     @Test
     public void atualizarTest(){
-        var id = UUID.fromString("");
+        var id = UUID.fromString("84db3b4a-fccd-4910-bbbe-7c081f7577d1");
 
-        Optional<Autor> possivelAutor = repository.findById();
+        Optional<Autor> possivelAutor = repository.findById(id);
 
         if(possivelAutor.isPresent()) {
             Autor autorEncontrado = possivelAutor.get();
@@ -42,5 +42,16 @@ public class AutorRepositoryTest {
 
             repository.save(autorEncontrado);
         }
+    }
+
+    @Test
+    public void listarTest(){
+        List<Autor> lista = repository.findAll();
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    public void countTest(){
+        System.out.println("Contagem de autores: " + repository.count());
     }
 }

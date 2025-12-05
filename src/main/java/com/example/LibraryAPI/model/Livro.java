@@ -8,12 +8,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "livro")
+@Table(name = "tb_livro")
 public class Livro {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "isbn", length = 20, nullable = false)
