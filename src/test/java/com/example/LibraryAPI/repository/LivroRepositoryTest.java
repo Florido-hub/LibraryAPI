@@ -93,4 +93,10 @@ class LivroRepositoryTest {
 
         repository.save(livroParaAtualizar);
     }
+
+    @Test
+    void delete() {
+        UUID id = UUID.fromString("84db3b4a-fccd-4910-bbbe-7c081f7577d1");
+        repository.deleteById(id);
+    }
 }
