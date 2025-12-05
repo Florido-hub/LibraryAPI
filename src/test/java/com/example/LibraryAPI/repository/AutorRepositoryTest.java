@@ -54,4 +54,17 @@ public class AutorRepositoryTest {
     public void countTest(){
         System.out.println("Contagem de autores: " + repository.count());
     }
+
+    @Test
+    public void deletePorIdTest(){
+        var id = UUID.fromString("84db3b4a-fccd-4910-bbbe-7c081f7577d1");
+        repository.deleteById(id);
+    }
+
+    @Test
+    public void deleteTest(){
+        var id = UUID.fromString("84db3b4a-fccd-4910-bbbe-7c081f7577d1");
+        var maria = repository.findById(id).get();
+        repository.delete(maria);
+    }
 }
