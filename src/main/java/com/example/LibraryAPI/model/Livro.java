@@ -1,6 +1,7 @@
 package com.example.LibraryAPI.model;
 
 import jakarta.persistence.*;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tb_livro")
+@ToString(exclude = "autor")
 public class Livro {
 
     @Id
