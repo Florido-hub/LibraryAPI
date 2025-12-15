@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -110,5 +111,17 @@ class LivroRepositoryTest {
         System.out.println(livro.getTittle());
         System.out.println("Autor: ");
         System.out.println(livro.getAutor());
+    }
+
+    @Test
+    void pesquisaPorTituloTest(){
+        List<Livro> lista = repository.findByTittle("Interestelar");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorIsbnTest(){
+        List<Livro> lista = repository.findByisbn("2134-1241");
+        lista.forEach(System.out::println);
     }
 }
