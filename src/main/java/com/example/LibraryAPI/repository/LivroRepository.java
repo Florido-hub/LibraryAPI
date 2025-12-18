@@ -1,9 +1,11 @@
 package com.example.LibraryAPI.repository;
 
 import com.example.LibraryAPI.model.Autor;
+import com.example.LibraryAPI.model.GeneroLivro;
 import com.example.LibraryAPI.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -50,4 +52,16 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
         order by l.genero
         """)
     List<String> listarGenerosAutoresBrasileiros();
+
+    //named parameters -> parametros nomeados
+    @Query("select l from Livro l where l.genero = :genero")
+    List<Livro> buscarPorGenero(
+            @Param("genero") GeneroLivro generoLivro
+    );
+
+    //positional parameters
+    @Query("select l from Livro l where l.genero = ?1")
+    List<Livro> buscarPorGeneroPositionalParameters(GeneroLivro generoLivro);
+
+    List<Livro> findByGeneroOrderByPreco(GeneroLivro generoLivro, BigDecimal preco);
 }
