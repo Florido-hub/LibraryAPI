@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -84,7 +83,7 @@ class LivroRepositoryTest {
     }
 
     @Test
-    public void atualizarTest(){
+    void atualizarTest(){
         UUID id = UUID.fromString("84db3b4a-fccd-4910-bbbe-7c081f7577d1");
         var livroParaAtualizar = repository.findById(id).orElse(null);
 
@@ -123,5 +122,29 @@ class LivroRepositoryTest {
     void pesquisaPorIsbnTest(){
         List<Livro> lista = repository.findByisbn("2134-1241");
         lista.forEach(System.out::println);
+    }
+
+    @Test
+    void listarLivrosComQueryJPQL(){
+        var resultadoPesquisa = repository.listarTodosOrdenadoPorTituloAndPreco();
+        resultadoPesquisa.forEach(System.out::println);
+    }
+
+    @Test
+    void listarAutoresDosLivros(){
+        var resultadoPesquisa = repository.listarAutoresDosLivros();
+        resultadoPesquisa.forEach(System.out::println);
+    }
+
+    @Test
+    void listarTitulosNaoRepetidosDosLivros(){
+        var resultadoPesquisa = repository.listarNomesDiferentesLivros();
+        resultadoPesquisa.forEach(System.out::println);
+    }
+
+    @Test
+    void listarGenerosDeAutoresBrasileiros(){
+        var resultadoPesquisa = repository.listarGenerosAutoresBrasileiros();
+        resultadoPesquisa.forEach(System.out::println);
     }
 }
