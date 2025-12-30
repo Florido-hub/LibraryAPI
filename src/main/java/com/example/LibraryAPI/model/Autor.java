@@ -2,8 +2,12 @@ package com.example.LibraryAPI.model;
 
 import jakarta.persistence.*;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -11,6 +15,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "tb_autor")
 @ToString(exclude = "livros")
+@EntityListeners(AuditingEntityListener.class)
 public class Autor {
 
     @Id
@@ -29,6 +34,17 @@ public class Autor {
 
     @OneToMany(mappedBy = "autor")
     private List<Livro> livros;
+
+    @CreatedDate
+    @Column(name = "data_cadastro")
+    private LocalDateTime dataCadastro;
+
+    @LastModifiedDate
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
 
     public UUID getId() {
         return id;
@@ -68,6 +84,30 @@ public class Autor {
 
     public void setLivros(List<Livro> livros) {
         this.livros = livros;
+    }
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public UUID getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     @Override

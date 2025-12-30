@@ -28,6 +28,7 @@ public class AutorController {
         var autorEntidade = autor.mapearParaAutor();
         autorService.salvar(autorEntidade);
 
+        // http://localhost:8080/autores/id
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
