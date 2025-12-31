@@ -23,6 +23,13 @@ public class AutorService {
         return autorRepository.save(autor);
     }
 
+    public void update(Autor autor){
+        if(autor.getId() == null){
+            throw new IllegalArgumentException("Para atualizar, é necessário que o autor ja esteja salvo na BD");
+        }
+        autorRepository.save(autor);
+    }
+
     public Optional<Autor> getById(UUID id){
         return autorRepository.findById(id);
     }

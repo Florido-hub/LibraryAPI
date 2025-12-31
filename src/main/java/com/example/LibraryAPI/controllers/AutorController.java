@@ -41,6 +41,7 @@ public class AutorController {
         return ResponseEntity.created(location).build();
     }
 
+    // http://localhost:8080/autores/id
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable String id) {
         var idAutor = UUID.fromString(id);
@@ -57,6 +58,7 @@ public class AutorController {
         return ResponseEntity.notFound().build();
     }
 
+    // http://localhost:8080/autores/id
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable String id){
         var idAutor = UUID.fromString(id);
@@ -86,5 +88,27 @@ public class AutorController {
                         autor.getNacionalidade())
                 ).toList();
         return ResponseEntity.ok(lista);
+    }
+
+    // http://localhost:8080/autores/id
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            @PathVariable String id,
+            @RequestBody AutorDTO autorDTO){
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = autorService.getById(idAutor);
+
+        if(autorOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Autor autor = autorOptional.get();
+        autor.setNome(autorDTO.nome());
+        autor.setDataNascimento(autorDTO.dataNascimento());
+        autor.setNacionalidade(autorDTO.nacionalidade());
+
+        autorService.update(autor);
+
+        return ResponseEntity.noContent().build();
     }
 }
