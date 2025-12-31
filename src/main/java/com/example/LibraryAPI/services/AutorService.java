@@ -2,6 +2,7 @@ package com.example.LibraryAPI.services;
 
 import com.example.LibraryAPI.model.Autor;
 import com.example.LibraryAPI.repository.AutorRepository;
+import com.example.LibraryAPI.validator.AutorValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +14,16 @@ import java.util.UUID;
 public class AutorService {
 
     private final AutorRepository autorRepository;
+    private final AutorValidator validator;
 
     @Autowired
-    public AutorService(AutorRepository autorRepository) {
+    public AutorService(AutorRepository autorRepository, AutorValidator validator) {
         this.autorRepository = autorRepository;
+        this.validator = validator;
     }
 
     public Autor salvar(Autor autor){
+        validator.validar(autor);
         return autorRepository.save(autor);
     }
 

@@ -1,6 +1,8 @@
 package com.example.LibraryAPI.controllers;
 
 import com.example.LibraryAPI.DTOs.AutorDTO;
+import com.example.LibraryAPI.DTOs.ErroResponse;
+import com.example.LibraryAPI.exceptions.RegistroDuplicadoException;
 import com.example.LibraryAPI.model.Autor;
 import com.example.LibraryAPI.services.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +28,24 @@ public class AutorController {
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody AutorDTO autor){
-        var autorEntidade = autor.mapearParaAutor();
-        autorService.salvar(autorEntidade);
+        try {
+            var autorEntidade = autor.mapearParaAutor();
+            autorService.salvar(autorEntidade);
 
-        // http://localhost:8080/autores/id
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(autorEntidade.getId())
-                .toUri();
-        // Heater Location
+            // http://localhost:8080/autores/id
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(autorEntidade.getId())
+                    .toUri();
+            // Heater Location
 
 
-        return ResponseEntity.created(location).build();
+            return ResponseEntity.created(location).build();
+        }catch (RegistroDuplicadoException erro){
+            var erroDTO = ErroResponse.conflito(erro.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
     }
 
     // http://localhost:8080/autores/id
