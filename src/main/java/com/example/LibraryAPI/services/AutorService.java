@@ -31,6 +31,7 @@ public class AutorService {
         if(autor.getId() == null){
             throw new IllegalArgumentException("Para atualizar, é necessário que o autor ja esteja salvo na BD");
         }
+        validator.validar(autor);
         autorRepository.save(autor);
     }
 
