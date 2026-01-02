@@ -103,7 +103,7 @@ public class AutorController {
             @PathVariable String id,
             @RequestBody AutorDTO autorDTO){
         try {
-            
+
             var idAutor = UUID.fromString(id);
             Optional<Autor> autorOptional = autorService.getById(idAutor);
 

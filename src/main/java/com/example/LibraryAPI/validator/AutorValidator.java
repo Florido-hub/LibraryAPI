@@ -24,8 +24,13 @@ public class AutorValidator {
     private boolean existeAutorCadastrado(Autor autor){
         Optional<Autor> autorEncontrado = repository
                 .findByNomeAndDataNascimentoAndNacionalidade(
-                        autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()
+                        autor.getNome(),
+                        autor.getDataNascimento(),
+                        autor.getNacionalidade()
                 );
+        if(autorEncontrado.isEmpty())
+            return false;
+        
         if(autor.getId() == null){
             return autorEncontrado.isPresent();
         }
