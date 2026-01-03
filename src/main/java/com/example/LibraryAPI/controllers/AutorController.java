@@ -2,9 +2,11 @@ package com.example.LibraryAPI.controllers;
 
 import com.example.LibraryAPI.DTOs.AutorDTO;
 import com.example.LibraryAPI.DTOs.ErroResponse;
+import com.example.LibraryAPI.exceptions.OperacaoNaoPermitida;
 import com.example.LibraryAPI.exceptions.RegistroDuplicadoException;
 import com.example.LibraryAPI.model.Autor;
 import com.example.LibraryAPI.services.AutorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +19,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/autores") // http://localhost:8080/autores
+@RequiredArgsConstructor
 public class AutorController {
 
     private final AutorService autorService;
 
-    @Autowired
-    public AutorController(AutorService autorService) {
-        this.autorService = autorService;
-    }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody AutorDTO autor){
@@ -67,16 +66,21 @@ public class AutorController {
 
     // http://localhost:8080/autores/id
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable String id){
-        var idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional = autorService.getById(idAutor);
+    public ResponseEntity<Object> deleteById(@PathVariable String id){
+        try {
+            var idAutor = UUID.fromString(id);
+            Optional<Autor> autorOptional = autorService.getById(idAutor);
 
-        if(autorOptional.isEmpty()){
-            return ResponseEntity.notFound().build();
+            if (autorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            autorService.deleteById(autorOptional.get());
+            return ResponseEntity.noContent().build();
+        }catch (OperacaoNaoPermitida erro){
+            var erroResposta = ErroResponse.respostaPadrao(erro.getMessage());
+            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
         }
-
-        autorService.deleteById(autorOptional.get());
-        return ResponseEntity.noContent().build();
     }
 
     // http://localhost:8080/autores?nome=fulano&nacionalidade=brasileiro
