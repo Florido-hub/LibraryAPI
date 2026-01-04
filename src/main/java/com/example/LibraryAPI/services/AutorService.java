@@ -7,6 +7,8 @@ import com.example.LibraryAPI.repository.LivroRepository;
 import com.example.LibraryAPI.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.AnnotatedArrayType;
@@ -61,6 +63,22 @@ public class AutorService {
         return autorRepository.findAll();
     }
 
+    public List<Autor> searchByExample(String nome, String nacionalidade) {
+        var autor = new Autor();
+        autor.setNome(nome);
+        autor.setNacionalidade(nacionalidade);
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnorePaths("id", "dataNascimento")
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Autor> autorExample = Example.of(autor, matcher);
+
+        return autorRepository.findAll(autorExample);
+
+    }
     public boolean possuiLivro(Autor autor){
         return livroRepository.existsByAutor(autor);
     }
