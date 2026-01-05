@@ -1,16 +1,25 @@
 package com.example.LibraryAPI.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_livro")
 @ToString(exclude = "autor")
+@Data
+@EntityListeners(AuditingEntityListener.class)
 public class Livro {
 
     @Id
@@ -38,61 +47,16 @@ public class Livro {
     @JoinColumn(name = "id_autor")
     private Autor autor;
 
-    public UUID getId() {
-        return id;
-    }
+    @CreatedDate
+    @Column(name = "data_cadastro")
+    private LocalDateTime dataCadastro;
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    @LastModifiedDate
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
 
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getTittle() {
-        return tittle;
-    }
-
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
-    }
-
-    public LocalDate getDataPublicacao() {
-        return dataPublicacao;
-    }
-
-    public void setDataPublicacao(LocalDate dataPublicacao) {
-        this.dataPublicacao = dataPublicacao;
-    }
-
-    public GeneroLivro getGenero() {
-        return genero;
-    }
-
-    public void setGenero(GeneroLivro genero) {
-        this.genero = genero;
-    }
-
-    public BigDecimal getPreco() {
-        return preco;
-    }
-
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
-    }
-
-    public Autor getAutor() {
-        return autor;
-    }
-
-    public void setAutor(Autor autor) {
-        this.autor = autor;
-    }
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
 
     @Override
     public boolean equals(Object o) {
@@ -116,6 +80,9 @@ public class Livro {
                 ", genero=" + genero +
                 ", preco=" + preco +
                 ", autor=" + autor +
+                ", dataCadastro=" + dataCadastro +
+                ", dataAtualizacao=" + dataAtualizacao +
+                ", idUsuario=" + idUsuario +
                 '}';
     }
 }
