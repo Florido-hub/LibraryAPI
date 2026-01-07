@@ -38,25 +38,11 @@ public class LivroController implements GenericController{
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> GetDetailsById(@PathVariable String id){
-        UUID idLivro = UUID.fromString(id);
-        Optional<Livro> livroOptional = livroService.getById(idLivro);
-        if(livroOptional.isPresent()){
-            Livro livro = livroOptional.get();
-            Autor autor = livro.getAutor();
-            AutorDTO dto = autorMapper.toDTO(autor);
-            LivroDetailsDTO livroDetailsDTO = new LivroDetailsDTO(
-                    livro.getId(),
-                    livro.getIsbn(),
-                    livro.getTittle(),
-                    livro.getDataPublicacao(),
-                    livro.getGenero(),
-                    livro.getPreco(),
-                    dto);
-
-            return ResponseEntity.status(HttpStatus.OK).body(livroDetailsDTO);
-        }
-
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<LivroDetailsDTO> GetDetailsById(@PathVariable String id){
+        return livroService.getById(UUID.fromString(id))
+                .map(livro -> {
+                    LivroDetailsDTO dto = livroMapper.toDTO(livro);
+                    return ResponseEntity.ok(dto);
+                }).orElseGet( () -> ResponseEntity.notFound().build());
     }
 }
