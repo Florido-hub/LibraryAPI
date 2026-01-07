@@ -1,4 +1,4 @@
-package com.example.LibraryAPI.DTOs;
+package com.example.LibraryAPI.controllers.DTOs;
 
 import com.example.LibraryAPI.model.Autor;
 import jakarta.validation.constraints.NotBlank;
