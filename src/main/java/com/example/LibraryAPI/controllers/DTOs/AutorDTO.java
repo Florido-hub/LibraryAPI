@@ -1,6 +1,5 @@
 package com.example.LibraryAPI.controllers.DTOs;
 
-import com.example.LibraryAPI.model.Autor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -21,11 +20,4 @@ public record AutorDTO(
         @Size(min = 2, max = 50, message = "campo fora do tamanho padrao")
         String nacionalidade
 ) {
-    public Autor mapearParaAutor(){
-        Autor autor = new Autor();
-        autor.setNome(this.nome);
-        autor.setDataNascimento(this.dataNascimento);
-        autor.setNacionalidade(this.nacionalidade);
-        return autor;
-    }
 }

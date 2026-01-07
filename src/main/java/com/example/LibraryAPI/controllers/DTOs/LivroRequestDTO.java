@@ -28,6 +28,6 @@ public record LivroRequestDTO(
         BigDecimal preco,
 
         @NotNull(message = "campo obrigatorio")
-        UUID id_autor
+        UUID idAutor
 ){
 }
