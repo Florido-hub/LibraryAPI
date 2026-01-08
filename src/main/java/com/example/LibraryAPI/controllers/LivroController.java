@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -40,4 +41,14 @@ public class LivroController implements GenericController{
                 }).orElseGet( () -> ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@PathVariable String id){
+        UUID idLivro = UUID.fromString(id);
+
+        return livroService.getById(idLivro)
+                .map(livro -> {
+                    livroService.delete(livro);
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
