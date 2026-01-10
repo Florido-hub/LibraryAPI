@@ -28,6 +28,13 @@ public class LivroService {
         return livroRepository.save(livro);
     }
 
+    public void update(Livro livro) {
+        if(livro.getId() == null){
+            throw new IllegalArgumentException("Para atualizar, é necessário que o livro ja esteja salvo na BD");
+        }
+        livroRepository.save(livro);
+    }
+
 
     public Optional<Livro> getById(UUID id) {
         return livroRepository.findById(id);
@@ -62,6 +69,10 @@ public class LivroService {
 
         if(anoPublicacao != null){
             specification = specification.and(anoPublicacaoEqual(anoPublicacao));
+        }
+
+        if(nomeAutor != null){
+            specification = specification.and(nomeAutorLike(nomeAutor));
         }
 
         return livroRepository.findAll(specification);
