@@ -2,6 +2,7 @@ package com.example.LibraryAPI.controllers.common;
 
 import com.example.LibraryAPI.controllers.DTOs.ErroCampo;
 import com.example.LibraryAPI.controllers.DTOs.ErroResponse;
+import com.example.LibraryAPI.exceptions.IsbnDuplicadoException;
 import com.example.LibraryAPI.exceptions.OperacaoNaoPermitida;
 import com.example.LibraryAPI.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
@@ -50,5 +51,12 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Ocorreu um erro inesperado no sistema",
                 List.of());
+    }
+
+
+    @ExceptionHandler(IsbnDuplicadoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroResponse handleIsbnDuplicadoException(IsbnDuplicadoException e){
+        return ErroResponse.respostaPadrao(e.getMessage());
     }
 }

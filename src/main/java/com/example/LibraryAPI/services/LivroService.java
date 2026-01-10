@@ -1,5 +1,6 @@
 package com.example.LibraryAPI.services;
 
+import com.example.LibraryAPI.exceptions.IsbnDuplicadoException;
 import com.example.LibraryAPI.model.Autor;
 import com.example.LibraryAPI.model.GeneroLivro;
 import com.example.LibraryAPI.model.Livro;
@@ -25,7 +26,14 @@ public class LivroService {
 
 
     public Livro salvar(Livro livro) {
+        if(isbnDuplicado(livro.getIsbn())){
+            throw new IsbnDuplicadoException("ISBN duplicado");
+        }
         return livroRepository.save(livro);
+    }
+
+    private boolean isbnDuplicado(String isbn) {
+        return  livroRepository.existsByIsbn(isbn);
     }
 
     public void update(Livro livro) {
@@ -102,4 +110,6 @@ public class LivroService {
 
         return livroRepository.findAll(livroExample);
     }
+
+
 }

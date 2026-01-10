@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -73,22 +72,23 @@ public class LivroController implements GenericController{
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(
+    public ResponseEntity<Object> update(
             @RequestBody @Valid LivroRequestDTO livroDto,
-            @PathVariable String id){
-        UUID idLivro = UUID.fromString(id);
-        Optional<Livro> livroOptional = livroService.getById(idLivro);
+            @PathVariable String id) {
+        return livroService.getById(UUID.fromString(id))
+                .map(livro -> {
+                    Livro aux = livroMapper.toEntity(livroDto);
 
-        if(livroOptional.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
+                    livro.setIsbn(aux.getIsbn());
+                    livro.setTittle(aux.getTittle());
+                    livro.setPreco(aux.getPreco());
+                    livro.setGenero(aux.getGenero());
+                    livro.setDataPublicacao(aux.getDataPublicacao());
+                    livro.setAutor(aux.getAutor());
 
-        Livro livro = livroOptional.get();
-        Livro livroAtualizado = livroMapper.toEntity(livroDto);
-        livroAtualizado.setId(livro.getId());
+                    livroService.update(livro);
 
-        livroService.update(livroAtualizado);
-
-        return ResponseEntity.noContent().build();
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
