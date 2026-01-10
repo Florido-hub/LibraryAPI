@@ -1,6 +1,7 @@
 package com.example.LibraryAPI.repository;
 
 import com.example.LibraryAPI.model.Autor;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,6 @@ public interface AutorRepository extends JpaRepository<Autor, UUID> {
     Optional<Autor> findByNomeAndDataNascimentoAndNacionalidade(
             String nome, LocalDate dataNascimento, String nacionalidade
     );
+
+    Example<? extends Autor> nome(String nome);
 }

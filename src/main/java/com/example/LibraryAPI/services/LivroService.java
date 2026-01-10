@@ -1,13 +1,16 @@
 package com.example.LibraryAPI.services;
 
+import com.example.LibraryAPI.model.Autor;
 import com.example.LibraryAPI.model.GeneroLivro;
 import com.example.LibraryAPI.model.Livro;
 import com.example.LibraryAPI.repository.LivroRepository;
-import com.example.LibraryAPI.repository.specifications.SpecificationLivro;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,7 +38,7 @@ public class LivroService {
     }
 
     //isbn, tittle, nomeAutor, genero, anoDePublicacao
-    public List<Livro> search(
+    public List<Livro> searchBySpecification(
             String isbn, String tittle, String nomeAutor, GeneroLivro generoLivro, Integer anoPublicacao) {
 
 //        Specification<Livro> specification = Specification
@@ -57,6 +60,35 @@ public class LivroService {
             specification = specification.and(generoEqual(generoLivro));
         }
 
+        if(anoPublicacao != null){
+            specification = specification.and(anoPublicacaoEqual(anoPublicacao));
+        }
+
         return livroRepository.findAll(specification);
+    }
+
+    public List<Livro> searchByExample(
+            String isbn, String tittle, String nomeAutor, GeneroLivro generoLivro, LocalDate dataPublicacao) {
+        Livro livro = new Livro();
+        livro.setIsbn(isbn);
+        livro.setTittle(tittle);
+        livro.setGenero(generoLivro);
+        livro.setDataPublicacao(dataPublicacao);
+
+        if (nomeAutor != null) {
+            Autor autor = new Autor();
+            autor.setNome(nomeAutor);
+            livro.setAutor(autor);
+        }
+
+//              .withIgnorePaths("id", "dataNascimento")
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Livro> livroExample = Example.of(livro, matcher);
+
+        return livroRepository.findAll(livroExample);
     }
 }

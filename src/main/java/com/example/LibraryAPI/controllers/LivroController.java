@@ -3,6 +3,7 @@ package com.example.LibraryAPI.controllers;
 import com.example.LibraryAPI.controllers.DTOs.LivroDetailsDTO;
 import com.example.LibraryAPI.controllers.DTOs.LivroRequestDTO;
 import com.example.LibraryAPI.controllers.mappers.LivroMapper;
+import com.example.LibraryAPI.model.GeneroLivro;
 import com.example.LibraryAPI.model.Livro;
 import com.example.LibraryAPI.services.LivroService;
 import jakarta.validation.Valid;
@@ -11,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/livros")
@@ -49,5 +52,22 @@ public class LivroController implements GenericController{
                     livroService.delete(livro);
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LivroDetailsDTO>> search(
+            @RequestParam(value = "isbn", required = false) String isbn,
+            @RequestParam(value = "tittle", required = false) String tittle,
+            @RequestParam(value = "nome_autor", required = false) String nomeAutor,
+            @RequestParam(value = "genero", required = false) GeneroLivro generoLivro,
+            @RequestParam(value = "ano_publicacao", required = false) Integer anoPublicacao
+    ){
+        List<Livro> search = livroService.searchBySpecification(isbn, tittle, nomeAutor, generoLivro, anoPublicacao);
+        var listaDTO = search
+                .stream()
+                .map(livroMapper::toDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(listaDTO);
     }
 }
