@@ -5,6 +5,7 @@ import com.example.LibraryAPI.model.Autor;
 import com.example.LibraryAPI.model.GeneroLivro;
 import com.example.LibraryAPI.model.Livro;
 import com.example.LibraryAPI.repository.LivroRepository;
+import com.example.LibraryAPI.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -23,12 +24,14 @@ import static com.example.LibraryAPI.repository.specifications.SpecificationLivr
 public class LivroService {
 
     private final LivroRepository livroRepository;
+    private final LivroValidator validator;
 
 
     public Livro salvar(Livro livro) {
         if(isbnDuplicado(livro.getIsbn())){
             throw new IsbnDuplicadoException("ISBN duplicado");
         }
+        validator.validar(livro);
         return livroRepository.save(livro);
     }
 
@@ -40,6 +43,7 @@ public class LivroService {
         if(livro.getId() == null){
             throw new IllegalArgumentException("Para atualizar, é necessário que o livro ja esteja salvo na BD");
         }
+        validator.validar(livro);
         livroRepository.save(livro);
     }
 

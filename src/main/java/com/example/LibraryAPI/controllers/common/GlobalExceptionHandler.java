@@ -53,7 +53,6 @@ public class GlobalExceptionHandler {
                 List.of());
     }
 
-
     @ExceptionHandler(IsbnDuplicadoException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErroResponse handleIsbnDuplicadoException(IsbnDuplicadoException e){

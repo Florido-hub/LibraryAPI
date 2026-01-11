@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -28,7 +29,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecific
 
     List<Livro> findByTittle(String tittle);
 
-    List<Livro> findByisbn(String isbn);
+    Optional<Livro> findByisbn(String isbn);
 
     List<Livro> findByTittleAndPreco(String Tittle, BigDecimal preco);
 
