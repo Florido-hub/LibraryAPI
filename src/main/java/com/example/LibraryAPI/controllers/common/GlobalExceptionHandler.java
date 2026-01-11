@@ -2,6 +2,7 @@ package com.example.LibraryAPI.controllers.common;
 
 import com.example.LibraryAPI.controllers.DTOs.ErroCampo;
 import com.example.LibraryAPI.controllers.DTOs.ErroResponse;
+import com.example.LibraryAPI.exceptions.CampoInvalidoException;
 import com.example.LibraryAPI.exceptions.IsbnDuplicadoException;
 import com.example.LibraryAPI.exceptions.OperacaoNaoPermitida;
 import com.example.LibraryAPI.exceptions.RegistroDuplicadoException;
@@ -57,5 +58,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErroResponse handleIsbnDuplicadoException(IsbnDuplicadoException e){
         return ErroResponse.respostaPadrao(e.getMessage());
+    }
+
+    @ExceptionHandler(CampoInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroResponse handleCampoInvalidoException(CampoInvalidoException e){
+        return new  ErroResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Erro validação",
+                List.of(new ErroCampo(e.getCampo(), e.getMessage())));
     }
 }
