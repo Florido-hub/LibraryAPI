@@ -6,8 +6,7 @@ import com.example.LibraryAPI.model.Livro;
 import com.example.LibraryAPI.repository.LivroRepository;
 import com.example.LibraryAPI.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +48,8 @@ public class LivroService {
     }
 
     //isbn, tittle, nomeAutor, genero, anoDePublicacao
-    public List<Livro> searchBySpecification(
-            String isbn, String tittle, String nomeAutor, GeneroLivro generoLivro, Integer anoPublicacao) {
+    public Page<Livro> searchBySpecification(
+            String isbn, String tittle, String nomeAutor, GeneroLivro generoLivro, Integer anoPublicacao, Integer pagina, Integer tamanhoPagina) {
 
 //        Specification<Livro> specification = Specification
 //                .where(SpecificationLivro.isbnEqual(isbn))
@@ -79,7 +78,9 @@ public class LivroService {
             specification = specification.and(nomeAutorLike(nomeAutor));
         }
 
-        return livroRepository.findAll(specification);
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+
+        return livroRepository.findAll(specification, pageRequest);
     }
 
     public List<Livro> searchByExample(
