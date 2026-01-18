@@ -1,6 +1,7 @@
 package com.example.LibraryAPI.controllers.mappers;
 
 import com.example.LibraryAPI.controllers.DTOs.LivroDetailsDTO;
+import com.example.LibraryAPI.controllers.DTOs.LivroMinDTO;
 import com.example.LibraryAPI.controllers.DTOs.LivroRequestDTO;
 import com.example.LibraryAPI.model.Livro;
 import com.example.LibraryAPI.repository.AutorRepository;
@@ -18,4 +19,6 @@ public abstract class LivroMapper {
     public abstract Livro toEntity(LivroRequestDTO dto);
 
     public abstract LivroDetailsDTO toDTO(Livro livro);
+
+    public abstract LivroMinDTO toMinDTO(Livro livro);
 }

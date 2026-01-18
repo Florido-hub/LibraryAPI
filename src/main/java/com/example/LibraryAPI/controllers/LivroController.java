@@ -1,6 +1,7 @@
 package com.example.LibraryAPI.controllers;
 
 import com.example.LibraryAPI.controllers.DTOs.LivroDetailsDTO;
+import com.example.LibraryAPI.controllers.DTOs.LivroMinDTO;
 import com.example.LibraryAPI.controllers.DTOs.LivroRequestDTO;
 import com.example.LibraryAPI.controllers.mappers.LivroMapper;
 import com.example.LibraryAPI.model.GeneroLivro;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,6 +33,21 @@ public class LivroController implements GenericController{
         URI url = gerarHeaderLocation(livro.getId());
 
         return ResponseEntity.created(url).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<LivroMinDTO>> getAll(
+            @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina
+    ){
+        if (pagina < 0) pagina = 0;
+        if (tamanhoPagina < 10) tamanhoPagina = 10;
+
+        Page<Livro> livros = livroService.getAll(pagina, tamanhoPagina);
+
+        Page<LivroMinDTO> pageLivros = livros.map(livroMapper::toMinDTO);
+
+        return ResponseEntity.ok(pageLivros);
     }
 
     @GetMapping("/{id}")
@@ -63,6 +80,9 @@ public class LivroController implements GenericController{
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
             @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina
     ){
+        if (pagina < 0) pagina = 0;
+        if (tamanhoPagina < 10) tamanhoPagina = 10;
+
         Page<Livro> pageSearch = livroService.searchBySpecification(
                 isbn, tittle, nomeAutor, generoLivro, anoPublicacao, pagina, tamanhoPagina);
 

@@ -1,16 +1,16 @@
 package com.example.LibraryAPI.services;
 
-import com.example.LibraryAPI.model.Autor;
 import com.example.LibraryAPI.model.GeneroLivro;
 import com.example.LibraryAPI.model.Livro;
 import com.example.LibraryAPI.repository.LivroRepository;
 import com.example.LibraryAPI.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -83,30 +83,9 @@ public class LivroService {
         return livroRepository.findAll(specification, pageRequest);
     }
 
-    public List<Livro> searchByExample(
-            String isbn, String tittle, String nomeAutor, GeneroLivro generoLivro, LocalDate dataPublicacao) {
-        Livro livro = new Livro();
-        livro.setIsbn(isbn);
-        livro.setTittle(tittle);
-        livro.setGenero(generoLivro);
-        livro.setDataPublicacao(dataPublicacao);
+    public Page<Livro> getAll(Integer pagina, Integer tamanhoPagina) {
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
 
-        if (nomeAutor != null) {
-            Autor autor = new Autor();
-            autor.setNome(nomeAutor);
-            livro.setAutor(autor);
-        }
-
-//              .withIgnorePaths("id", "dataNascimento")
-        ExampleMatcher matcher = ExampleMatcher
-                .matching()
-                .withIgnoreNullValues()
-                .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
-        Example<Livro> livroExample = Example.of(livro, matcher);
-
-        return livroRepository.findAll(livroExample);
+        return livroRepository.findAll(pageRequest);
     }
-
-
 }
