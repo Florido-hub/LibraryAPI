@@ -49,7 +49,7 @@ public class LivroService {
 
     //isbn, tittle, nomeAutor, genero, anoDePublicacao
     public Page<Livro> searchBySpecification(
-            String isbn, String tittle, String nomeAutor, GeneroLivro generoLivro, Integer anoPublicacao, Integer pagina, Integer tamanhoPagina) {
+            String isbn, String tittle, String nomeAutor, GeneroLivro generoLivro, Integer anoPublicacao, Pageable pageRequest) {
 
 //        Specification<Livro> specification = Specification
 //                .where(SpecificationLivro.isbnEqual(isbn))
@@ -78,14 +78,10 @@ public class LivroService {
             specification = specification.and(nomeAutorLike(nomeAutor));
         }
 
-        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
-
         return livroRepository.findAll(specification, pageRequest);
     }
 
-    public Page<Livro> getAll(Integer pagina, Integer tamanhoPagina) {
-        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
-
+    public Page<Livro> getAll(Pageable pageRequest) {
         return livroRepository.findAll(pageRequest);
     }
 }

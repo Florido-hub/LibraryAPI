@@ -10,11 +10,11 @@ import com.example.LibraryAPI.services.LivroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,15 +36,8 @@ public class LivroController implements GenericController{
     }
 
     @GetMapping
-    public ResponseEntity<Page<LivroMinDTO>> getAll(
-            @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
-            @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina
-    ){
-        if (pagina < 0) pagina = 0;
-        if (tamanhoPagina < 10) tamanhoPagina = 10;
-
-        Page<Livro> livros = livroService.getAll(pagina, tamanhoPagina);
-
+    public ResponseEntity<Page<LivroMinDTO>> getAll(Pageable pageable){
+        Page<Livro> livros = livroService.getAll(pageable);
         Page<LivroMinDTO> pageLivros = livros.map(livroMapper::toMinDTO);
 
         return ResponseEntity.ok(pageLivros);
@@ -77,14 +70,11 @@ public class LivroController implements GenericController{
             @RequestParam(value = "nome_autor", required = false) String nomeAutor,
             @RequestParam(value = "genero", required = false) GeneroLivro generoLivro,
             @RequestParam(value = "ano_publicacao", required = false) Integer anoPublicacao,
-            @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
-            @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina
+            Pageable pageable
     ){
-        if (pagina < 0) pagina = 0;
-        if (tamanhoPagina < 10) tamanhoPagina = 10;
 
         Page<Livro> pageSearch = livroService.searchBySpecification(
-                isbn, tittle, nomeAutor, generoLivro, anoPublicacao, pagina, tamanhoPagina);
+                isbn, tittle, nomeAutor, generoLivro, anoPublicacao, pageable);
 
         Page<LivroDetailsDTO> livroDetailsDTO = pageSearch.map(livroMapper::toDTO);
 
