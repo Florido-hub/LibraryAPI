@@ -10,14 +10,16 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SpringConfiguration {
+public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
+                .formLogin(c -> {
+                    c.loginPage("/login").permitAll();
+                })
                 .authorizeHttpRequests(authorize -> {
                     authorize.anyRequest().authenticated();
                 })
