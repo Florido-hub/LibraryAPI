@@ -63,7 +63,7 @@ public class LivroController implements GenericController{
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<Page<LivroDetailsDTO>> search(
             @RequestParam(value = "isbn", required = false) String isbn,
             @RequestParam(value = "tittle", required = false) String tittle,
