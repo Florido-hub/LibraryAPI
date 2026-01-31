@@ -5,86 +5,113 @@
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-            rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-            rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         body {
-            background: linear-gradient(135deg, #0d6efd, #212529);
-            height: 100vh;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+            min-height: 100vh;
         }
+
+        .login-container {
+            max-width: 420px;
+            width: 100%;
+        }
+
         .login-card {
-            border-radius: 1rem;
+            backdrop-filter: blur(14px);
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 1.2rem;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #fff;
+        }
+
+        .login-card h3 {
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            background: rgba(255,255,255,0.85);
+            border: none;
+            border-radius: 0.6rem;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(13,110,253,.4);
+        }
+
+        .input-group-text {
+            background: rgba(255,255,255,0.85);
+            border: none;
+        }
+
+        .btn-login {
+            border-radius: 0.7rem;
+            padding: 0.6rem;
+            font-weight: 600;
+        }
+
+        .login-footer a {
+            color: #f8f9fa;
+            font-size: 0.9rem;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body class="d-flex justify-content-center align-items-center">
 
-<div class="card login-card shadow-lg p-4" style="width: 100%; max-width: 380px;">
-    <div class="card-body">
+<div class="login-container">
+    <div class="card login-card shadow-lg p-4">
+        <div class="card-body">
 
-        <h4 class="text-center mb-4 fw-bold">Acesso ao Sistema</h4>
+            <h3 class="text-center mb-4 fw-bold">
+                Login / Register
+            </h3>
 
-        <form method="post" th:action="@{/login}">
-            <!-- Usuário -->
-            <div class="mb-3">
-                <label class="form-label">Usuário</label>
-                <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="bi bi-person-fill"></i>
-                        </span>
-                    <input
-                            type="text"
-                            class="form-control"
-                            id="username"
-                            name="username"
-                            placeholder="Digite seu usuário"
-                            required>
+            <form method="post" th:action="@{/login}">
+
+                <div class="mb-3">
+                    <label class="form-label">Usuário</label>
+                    <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                        <input type="text"
+                               class="form-control"
+                               id="username"
+                               name="username"
+                               placeholder="Seu usuário"
+                               required>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Senha -->
-            <div class="mb-3">
-                <label class="form-label">Senha</label>
-                <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="bi bi-lock-fill"></i>
-                        </span>
-                    <input
-                            type="password"
-                            class="form-control"
-                            id="password"
-                            name="password"
-                            placeholder="Digite sua senha"
-                            required>
+                <div class="mb-3">
+                    <label class="form-label">Senha</label>
+                    <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                        <input type="password"
+                               class="form-control"
+                               id="password"
+                               name="password"
+                               placeholder="Sua senha"
+                               required>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Opções -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="lembrar">
-                    <label class="form-check-label" for="lembrar">
-                        Lembrar-me
-                    </label>
-                </div>
-                <a href="#" class="text-decoration-none small">Esqueceu a senha?</a>
-            </div>
+                <button type="submit" class="btn btn-primary w-100 btn-login">
+                    Entrar
+                </button>
+            </form>
 
-            <!-- Botão -->
-            <button type="submit" class="btn btn-primary w-100 fw-semibold">
-                Entrar
-            </button>
-        </form>
-
+        </div>
     </div>
 </div>
 
