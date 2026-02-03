@@ -14,14 +14,14 @@ import java.util.UUID;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column
     private String login;
 
-    @Column(nullable = false)
-    private String password;
+    @Column
+    private String senha;
 
     @Type(ListArrayType.class)
     @Column(name = "roles", columnDefinition = "varchar[]")
