@@ -7,6 +7,7 @@ import com.example.LibraryAPI.exceptions.IsbnDuplicadoException;
 import com.example.LibraryAPI.exceptions.OperacaoNaoPermitida;
 import com.example.LibraryAPI.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +44,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErroResponse handleOperacaoNaoPermitidaException(OperacaoNaoPermitida e){
         return ErroResponse.respostaPadrao(e.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErroResponse handleAccessDenied(AccessDeniedException e){
+        return new ErroResponse(HttpStatus.FORBIDDEN.value(),
+                "Acesso negado!",
+                List.of());
     }
 
     @ExceptionHandler(RuntimeException.class)
