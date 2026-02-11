@@ -7,6 +7,7 @@ import com.example.LibraryAPI.services.AutorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -24,6 +25,7 @@ public class AutorController implements GenericController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> save(@RequestBody @Valid AutorDTO dto) {
         var autor = autorMapper.toAntity(dto);
         autorService.salvar(autor);
@@ -35,6 +37,7 @@ public class AutorController implements GenericController {
 
     // http://localhost:8080/autores/id
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR','GERENTE')")
     public ResponseEntity<AutorDTO> getDetailsById(@PathVariable String id) {
         var idAutor = UUID.fromString(id);
 
@@ -58,6 +61,7 @@ public class AutorController implements GenericController {
 
     // http://localhost:8080/autores/id
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> deleteById(@PathVariable String id) {
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.getById(idAutor);
@@ -72,6 +76,7 @@ public class AutorController implements GenericController {
 
     // http://localhost:8080/autores?nome=fulano&nacionalidade=brasileiro
     @GetMapping
+    @PreAuthorize("hasAnyRole('OPERADOR','GERENTE')")
     public ResponseEntity<List<AutorDTO>> pesquisar(
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade) {
@@ -86,6 +91,7 @@ public class AutorController implements GenericController {
 
     // http://localhost:8080/autores/id
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> update(
             @PathVariable String id,
             @RequestBody @Valid AutorDTO autorDTO) {
