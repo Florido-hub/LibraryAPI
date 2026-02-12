@@ -18,8 +18,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "tb_livro")
 @ToString(exclude = "autor")
-@Data
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class Livro {
 
     @Id
@@ -55,34 +55,14 @@ public class Livro {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
-    @Column(name = "id_usuario")
-    private UUID idUsuario;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Livro livro)) return false;
         return Objects.equals(id, livro.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Livro{" +
-                "id=" + id +
-                ", isbn='" + isbn + '\'' +
-                ", tittle='" + tittle + '\'' +
-                ", dataPublicacao=" + dataPublicacao +
-                ", genero=" + genero +
-                ", preco=" + preco +
-                ", autor=" + autor +
-                ", dataCadastro=" + dataCadastro +
-                ", dataAtualizacao=" + dataAtualizacao +
-                ", idUsuario=" + idUsuario +
-                '}';
     }
 }

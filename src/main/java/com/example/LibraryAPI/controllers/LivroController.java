@@ -39,9 +39,9 @@ public class LivroController implements GenericController{
 
     @GetMapping
     @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
-    public ResponseEntity<Page<LivroMinDTO>> getAll(Pageable pageable){
+    public ResponseEntity<Page<LivroDetailsDTO>> getAll(Pageable pageable){
         Page<Livro> livros = livroService.getAll(pageable);
-        Page<LivroMinDTO> pageLivros = livros.map(livroMapper::toMinDTO);
+        Page<LivroDetailsDTO> pageLivros = livros.map(livroMapper::toDTO);
 
         return ResponseEntity.ok(pageLivros);
     }

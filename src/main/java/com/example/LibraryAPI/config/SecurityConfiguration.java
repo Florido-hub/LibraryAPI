@@ -43,7 +43,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UsuarioService UsuarioService, UsuarioService usuarioService) {
+    public UserDetailsService userDetailsService(UsuarioService usuarioService) {
         return new CustomUserDetailsService(usuarioService);
     }
 }
