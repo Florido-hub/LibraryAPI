@@ -2,10 +2,13 @@ package com.example.LibraryAPI.services;
 
 import com.example.LibraryAPI.exceptions.OperacaoNaoPermitida;
 import com.example.LibraryAPI.model.Autor;
+import com.example.LibraryAPI.model.Usuario;
 import com.example.LibraryAPI.repository.AutorRepository;
 import com.example.LibraryAPI.repository.LivroRepository;
+import com.example.LibraryAPI.security.SecurityService;
 import com.example.LibraryAPI.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -18,12 +21,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AutorService {
 
+
     private final AutorRepository autorRepository;
     private final AutorValidator validator;
     private final LivroRepository livroRepository;
+    private final SecurityService  securityService;
 
     public Autor salvar(Autor autor){
         validator.validar(autor);
+
+        Usuario usuario = securityService.obterUsuario();
+        autor.setUsuario(usuario);
+
         return autorRepository.save(autor);
     }
 

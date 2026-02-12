@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -26,6 +27,7 @@ public class LivroController implements GenericController{
     private final LivroMapper livroMapper;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Void> salvar(@RequestBody @Valid LivroRequestDTO livroDto){
         Livro livro = livroMapper.toEntity(livroDto);
         livroService.salvar(livro);
@@ -36,14 +38,16 @@ public class LivroController implements GenericController{
     }
 
     @GetMapping
-    public ResponseEntity<Page<LivroMinDTO>> getAll(Pageable pageable){
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
+    public ResponseEntity<Page<LivroDetailsDTO>> getAll(Pageable pageable){
         Page<Livro> livros = livroService.getAll(pageable);
-        Page<LivroMinDTO> pageLivros = livros.map(livroMapper::toMinDTO);
+        Page<LivroDetailsDTO> pageLivros = livros.map(livroMapper::toDTO);
 
         return ResponseEntity.ok(pageLivros);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<LivroDetailsDTO> GetDetailsById(@PathVariable String id){
         return livroService.getById(UUID.fromString(id))
                 .map(livro -> {
@@ -53,6 +57,7 @@ public class LivroController implements GenericController{
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Object> delete(@PathVariable String id){
         UUID idLivro = UUID.fromString(id);
 
@@ -64,6 +69,7 @@ public class LivroController implements GenericController{
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Page<LivroDetailsDTO>> search(
             @RequestParam(value = "isbn", required = false) String isbn,
             @RequestParam(value = "tittle", required = false) String tittle,
@@ -82,6 +88,7 @@ public class LivroController implements GenericController{
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Object> update(
             @RequestBody @Valid LivroRequestDTO livroDto,
             @PathVariable String id) {
